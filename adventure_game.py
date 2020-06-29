@@ -1,4 +1,4 @@
-#################################################################################
+##############################################################################
 # Project: Adventure Game (Introduction to Programming Project #2)
 # Student: Tony Burge
 # Date: June 29, 2020
@@ -6,7 +6,7 @@
 # This program provides various scenarios to a player. Based on a player's
 # choice, the code provides different options. Ultimately, the player wins or
 # loses and is given an opportunity to play again.
-#################################################################################
+##############################################################################
 #
 import time
 import random
@@ -16,7 +16,7 @@ def print_pause(message):
     # had to set flush=True or my bash would perform all the sleep
     # commands before printing messages all at once
     print(message, flush=True)
-    time.sleep(.4)
+    time.sleep(2)
 
 
 def ask_question(question_list):
@@ -150,7 +150,7 @@ def go_to_house(items, antagonist):
     return False
 
 
-def got_to_field(items, antagonist):
+def go_to_field(items, antagonist):
     #
     # initialize end_of_game boolean
     end_of_game = False
@@ -168,7 +168,7 @@ def got_to_field(items, antagonist):
     #
     # if end_of_game is False, continue
     if (not end_of_game):
-        got_to_field(items, antagonist)
+        go_to_field(items, antagonist)
 
 
 def play_game():
@@ -188,20 +188,22 @@ def play_game():
     display_intro(antagonist)
     #
     # ask user to select where to search
-    got_to_field(items, antagonist)
+    go_to_field(items, antagonist)
     #
     # does player wish to play again?
-    print_pause("Would you like to play again?")
-    choice = ask_question([["y", "Yes, play again"],
-                          ["n", "No, exit the game"]])
+    # no delay since this is not part of the scenario
+    choice = ask_question([["1", "Play again"],
+                          ["2", "Exit the game"]])
     #
     # if players selects "y", call play_game function;
     # otherwise, display message and end of function
     if (choice == "y"):
         print_pause("Excellent! Restarting the game ...")
+        print_pause("....about ready")
         play_game()
     else:
-        print_pause("Thanks for playing! See you next time.")
+        # no need to pause if the player wishes to exit
+        print("Thanks for playing! See you next time.\n")
 
 
 #############################################################
