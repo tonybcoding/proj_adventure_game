@@ -6,16 +6,54 @@ def print_pause(message):
     # had to set flush=True or my bash would perform all the sleep
     # commands before printing messages all at once
     print(message, flush=True)
-    time.sleep(.2)
+    time.sleep(.4)
+
+
+def ask_question(question_list):
+    #
+    # initialize function variables
+    # will be used to store valid entries
+    response_list = []
+    #
+    # display list of options from question_list
+    print("\nWould you like to:")
+    for n in question_list:
+        print("   (" + n[0] + ") " + n[1])
+        response_list.append(n[0])
+    #
+    # loop until valid entry is entered
+    while True:
+        choice = input("Please choose " + ", ".join(response_list) +
+                       " --> ").lower()
+        if (choice in response_list):
+            break
+    #
+    # create white space and return player's choice
+    print("")
+    return choice
 
 
 def display_intro(antagonist):
     #
-    # display opening scenario
+    # initialize function variables
+    heading = "welcome to adventure game"
+    heading = " ".join(heading.upper())
+    pre_line = "*  "
+    post_line = "  *"
+    padding = len(pre_line + heading + post_line)
+    #
+    # create significant white space before starting the game
+    # and display welcoming banner
+    print("\n" * 50)
+    print(" " * 10 + "*" * padding)
+    print(" " * 10 + pre_line + heading + post_line)
+    print(" " * 10 + "*" * padding)
+    print_pause("\n\n")
+    # display scenario
     print_pause("You find yourself standing in an open field, "
                 "filled with grass and yellow wildflowers.")
     print_pause(f"Rumor has it that a {antagonist} is somewhere around here, "
-                "and has been terrifying the nearby village.")
+                "and has been terrifying the nearby village.\n")
     print_pause("In front of you is a house.")
     print_pause("To your right is a dark cave.")
     print_pause("In your hand you hold your trusty (but not "
@@ -24,12 +62,17 @@ def display_intro(antagonist):
 
 def fight(items, antagonist):
     #
+    # initialize function variables
+    dynamic_line = ""
+    #
     # if player does not have sword, they lose
     if("sword" not in items):
         print_pause("You do your best...")
         print_pause("but your dagger is no match for the "
-                    f"{antagonist}.")
-        print_pause("You have been defeated!")
+                    f"{antagonist}.\n")
+        print("*" * 23)
+        print("You have been defeated!")
+        print_pause("*" * 23 + "\n")
     # player is equipped with sword and wins
     else:
         print_pause(f"As the {antagonist} moves to attack, you "
@@ -37,9 +80,14 @@ def fight(items, antagonist):
         print_pause("The Sword of Ogoroth shines brightly in your "
                     "hand as you brace yourself for the attack.")
         print_pause(f"But the {antagonist} takes one look at your shiny "
-                    "new toy and runs away!")
-        print_pause(f"You have rid the town of the {antagonist}. "
-                    "You are victorious!")
+                    "new toy and runs away!\n")
+
+        dynamic_line = (f"You have rid the town of the {antagonist}.")
+
+        print("*" * len(dynamic_line))
+        print(dynamic_line)
+        print("You are victorious!")
+        print_pause("*" * len(dynamic_line) + "\n")
 
 
 def go_to_cave(items, antagonist):
@@ -57,7 +105,7 @@ def go_to_cave(items, antagonist):
         # replace dagger with sword
         items.remove("dagger")
         items.append("sword")
-    # already has sword
+    # already has dagger
     else:
         print_pause("You peer cautiously into the cave.")
         print_pause("You've been here before, and gotten all "
@@ -75,10 +123,7 @@ def go_to_house(items, antagonist):
     print_pause(f"The {antagonist} attacks you!")
     #
     # get input from player
-    while True:
-        choice = input("Would you like to (1) fight or (2) run away?")
-        if (choice == "1" or choice == "2"):
-            break
+    choice = ask_question([["1", "fight"], ["2", "run away"]])
     #
     # player chooses to fight, call fight function
     if (choice == "1"):
@@ -100,17 +145,9 @@ def got_to_field(items, antagonist):
     # initialize end_of_game boolean
     end_of_game = False
     #
-    # display house or field options
-    print_pause("\nEnter 1 to knock on the door of the house.")
-    print_pause("Enter 2 to peer into the cave.")
-    print_pause("What would you like to do?")
-    #
-    # loop until valid option is entered
-    while True:
-        print_pause("(Please enter 1 or 2.)")
-        choice = input()
-        if (choice == "1" or choice == "2"):
-            break
+    # ask player for next move
+    choice = ask_question([["1", "knock on the door of the house"],
+                          ["2", "peer into the cave"]])
     #
     # if user selects house
     if choice == "1":
@@ -144,10 +181,9 @@ def play_game():
     got_to_field(items, antagonist)
     #
     # does player wish to play again?
-    while True:
-        choice = input("Would you like to play again? (y/n)").lower()
-        if (choice == "y") or (choice == "n"):
-            break
+    print_pause("Would you like to play again?")
+    choice = ask_question([["y", "Yes, play again"],
+                          ["n", "No, exit the game"]])
     #
     # if players selects "y", call play_game function;
     # otherwise, display message and end of function
