@@ -1,3 +1,13 @@
+#################################################################################
+# Project: Adventure Game (Introduction to Programming Project #2)
+# Student: Tony Burge
+# Date: June 29, 2020
+# Purpose: Show improving competency of programming. Specifically with Python
+# This program provides various scenarios to a player. Based on a player's
+# choice, the code provides different options. Ultimately, the player wins or
+# loses and is given an opportunity to play again.
+#################################################################################
+#
 import time
 import random
 
